@@ -5,6 +5,7 @@ import Navbar from "@/components/Navbar";
 import { LanguageProvider } from "@/components/LanguageProvider";
 import Footer from "@/components/Footer";
 import Background from "@/components/Background";
+import ServiceWorkerManager from "@/components/ServiceWorkerManager";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -30,6 +31,7 @@ export default function RootLayout({
     <html lang="en" className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col">
         <LanguageProvider>
+          <ServiceWorkerManager />
           <Background />
           <Navbar />
           <main className="flex-1">{children}</main>
