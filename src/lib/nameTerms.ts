@@ -9,9 +9,13 @@ import { DEFAULT_LANG, type LangCode } from "@/lib/i18n";
 // Korean token dictionary. English source word -> 한국어.
 const ko: Record<string, string> = {};
 
-/** Register several tokens at once. */
+/** Register tokens into a target dictionary. Bound per-language via `into`. */
+let current: Record<string, string> = ko;
 function reg(map: Record<string, string>) {
-  Object.assign(ko, map);
+  Object.assign(current, map);
+}
+function into(dict: Record<string, string>) {
+  current = dict;
 }
 
 // Equipment / apparatus
@@ -187,8 +191,164 @@ reg({
   "toe-touch": "발끝터치", spellcaster: "스펠캐스터", "reverse-hyper": "리버스하이퍼",
 });
 
+// Chinese token dictionary. English source word -> 中文.
+const zh: Record<string, string> = {};
+into(zh);
 
-const dicts: Partial<Record<LangCode, Record<string, string>>> = { ko };
+// Equipment / apparatus
+reg({
+  dumbbell: "哑铃", dumbbells: "哑铃", barbell: "杠铃", cable: "拉索", ball: "球",
+  band: "弹力带", kettlebell: "壶铃", smith: "史密斯机", ez: "曲柄杠铃", "ez-bar": "曲柄杠铃",
+  "ez-barbell": "曲柄杠铃", "t-bar": "T杠", "sz-bar": "SZ杠", bar: "杠", bosu: "波速球",
+  medicine: "药球", rope: "绳索", ropes: "绳索", battling: "战绳", roller: "滚轮",
+  wheel: "健腹轮", sled: "雪橇", machine: "器械", lever: "杠杆", trainer: "训练器",
+  landmine: "杠铃底座", pulley: "滑轮", suspension: "悬吊", suspended: "悬吊",
+  resistance: "阻力", stability: "稳定", bike: "单车", bicycle: "单车",
+  elliptical: "椭圆机", treadmill: "跑步机", stepmill: "登山机", ergometer: "测力计",
+  cambered: "曲柄", trap: "六角杠", weighted: "负重", bodyweight: "自重", assisted: "辅助",
+  gripless: "无握", cage: "深蹲架", box: "跳箱", bench: "卧凳", benches: "卧凳",
+  chair: "椅", floor: "地面", wall: "墙", board: "板", platform: "台",
+  towel: "毛巾", strap: "带", straps: "带", handle: "握把", attachment: "配件",
+  pad: "垫", stepbox: "踏板", captains: "队长椅", cocoons: "卷腹", olympic: "奥林匹克",
+});
+
+// Core movements
+reg({
+  curl: "弯举", curls: "弯举", "curl-up": "卷体", press: "推举", presses: "推举",
+  row: "划船", raise: "上举", raises: "上举", "y-raise": "Y字上举", "t-raise": "T字上举",
+  extension: "伸展", fly: "飞鸟", flyes: "飞鸟", crunch: "卷腹", crunches: "卷腹",
+  squat: "深蹲", squats: "深蹲", squatting: "深蹲", lunge: "弓步", deadlift: "硬拉",
+  "push-up": "俯卧撑", pushup: "俯卧撑", "pull-up": "引体向上", "pull-ups": "引体向上",
+  pullup: "引体向上", "chin-up": "反手引体", "chin-ups": "反手引体", "sit-up": "仰卧起坐",
+  situp: "仰卧起坐", dip: "臂屈伸", dips: "臂屈伸", "dip-pull-up": "臂屈伸引体", pushdown: "下压",
+  pulldown: "下拉", pullover: "上拉", "pull-in": "收拉", pull: "拉", push: "推",
+  kickback: "后踢伸", kickbacks: "后踢伸", shrug: "耸肩", bridge: "臀桥", plank: "平板支撑",
+  clean: "翻", snatch: "抓举", jerk: "挺举", thruster: "推举深蹲", swing: "摆荡",
+  twist: "转体", twists: "转体", twisting: "转体", twisted: "转体",
+  rotation: "旋转", rotational: "旋转", rotary: "旋转", rotate: "旋转", "step-up": "登阶",
+  step: "踏步", jump: "跳", jumps: "跳", hop: "单跳", hops: "单跳", jack: "开合跳",
+  burpee: "波比跳", crawl: "爬行", climb: "攀爬", climber: "登山", run: "跑",
+  walk: "行走", walking: "行走", march: "踏步", carry: "行走搬运",
+  slam: "砸球", chop: "劈砍", woodchop: "劈砍", pass: "传递", drive: "驱动", throw: "抛",
+  hyperextension: "背屈伸", hyper: "超伸", abduction: "外展", adduction: "内收",
+  flexion: "屈曲", pronation: "旋前", supination: "旋后",
+  tilt: "倾斜", bend: "弯屈", bends: "弯屈", reach: "伸够", squeeze: "夹紧",
+  lift: "举", lifting: "举", "get-up": "起身", "muscle-up": "双力臂",
+  "v-up": "V字起坐", "v-sit": "V字支撑", "l-sit": "L字支撑", "l-pull-up": "L字引体",
+  fallout: "跪姿滚轮", rollout: "滚轮", rollerout: "滚轮",
+  "up-down": "起落", "side-to-side": "左右", "elbow-to-knee": "肘碰膝",
+  windmill: "风车", superman: "超人", scissor: "剪式", flutter: "打腿",
+});
+
+// Body parts / muscles
+reg({
+  arm: "臂", arms: "臂", leg: "腿", legs: "腿", legged: "腿", "leg-hip": "腿髋",
+  chest: "胸", shoulder: "肩", shoulders: "肩", back: "背", hip: "髋", hips: "髋",
+  knee: "膝", knees: "膝", calf: "小腿", calves: "小腿", neck: "颈", wrist: "腕",
+  wrists: "腕", ankle: "踝", ankles: "踝", toe: "脚尖", heel: "脚跟",
+  glute: "臀", glutes: "臀", gluteus: "臀", "glute-ham": "臀腿",
+  hamstring: "腘绳肌", quad: "股四头", quads: "股四头", biceps: "二头", bicep: "二头",
+  triceps: "三头", tricep: "三头", delt: "三角肌", deltoid: "三角肌", delts: "三角肌",
+  lat: "背阔肌", lats: "背阔肌", ab: "腹", abdominal: "腹", oblique: "腹斜肌",
+  spine: "脊柱", scapula: "肩胛", scapular: "肩胛", groin: "腹股沟", femoral: "股",
+  rectus: "直肌", femoris: "股", pectoralis: "胸大肌", pec: "胸肌", adductor: "内收肌",
+  abductor: "外展肌", peroneals: "腓骨肌", tibialis: "胫骨前肌", quadriceps: "股四头肌",
+  posterior: "后侧", anterior: "前侧", pelvic: "骨盆", finger: "手指", hand: "手",
+  hands: "手", elbow: "肘", face: "面", head: "头", butt: "臀",
+  sternum: "胸骨", body: "身体", "body-up": "起身", "bottoms-up": "底部向上",
+});
+
+// Positions / modifiers
+reg({
+  seated: "坐姿", sitted: "坐姿", sit: "坐", standing: "站姿", stance: "站距",
+  lying: "仰卧", supine: "仰卧", prone: "俯卧", kneeling: "跪姿", incline: "上斜",
+  decline: "下斜", flat: "平", bent: "屈", "bent-over": "俯身", "bent over": "俯身",
+  reverse: "反向", "reverse-grip": "反握", reversed: "反向", revers: "反向",
+  front: "前", rear: "后", side: "侧", lateral: "侧平", overhead: "过顶",
+  over: "上", under: "下", underhand: "反握", overhand: "正握", behind: "颈后",
+  close: "窄", "close-grip": "窄握", wide: "宽", "wide-grip": "宽握",
+  narrow: "窄", grip: "握", high: "高", low: "低",
+  upper: "上", lower: "下", middle: "中", inner: "内", outer: "外",
+  outside: "外侧", inside: "内侧", internal: "内", external: "外", neutral: "中立",
+  parallel: "平行", vertical: "垂直", horizontal: "水平", straight: "直",
+  cross: "交叉", "cross-over": "交叉", crossover: "交叉", crossovers: "交叉",
+  single: "单", one: "单", two: "双", "two-one": "二一", three: "三", double: "双",
+  alternate: "交替", alternating: "交替", twin: "双", diagonal: "对角",
+  palm: "掌", "palm-in": "掌心向内", palms: "掌",
+  pronated: "旋前", supinated: "旋后",
+  full: "全程", half: "半程", quarter: "四分之一", partial: "半程", short: "短", long: "长",
+  elevated: "垫高", raised: "抬高", extended: "伸展", bottoms: "底部", floor2: "地面",
+  "45": "45度", "90": "90度", degrees: "度", weight: "负重", weights: "负重",
+  plate: "杠铃片", plates: "杠铃片",
+});
+
+// Named / style variants (Chinese conventional names where they exist)
+reg({
+  russian: "俄式", arnold: "阿诺德", zottman: "佐特曼", spider: "蜘蛛式",
+  preacher: "牧师", peacher: "牧师", concentration: "集中", hammer: "锤式",
+  pistol: "手枪式", sumo: "相扑", cossack: "哥萨克", bulgarian: "保加利亚",
+  romanian: "罗马尼亚", jefferson: "杰斐逊", zercher: "泽奇", pendlay: "彭德利",
+  bradford: "布拉德福德", rocky: "洛基", cuban: "古巴", turkish: "土耳其", korean: "韩式",
+  hindu: "印度", judo: "柔道", yoga: "瑜伽", pilates: "普拉提", frog: "青蛙",
+  donkey: "驴式", gorilla: "大猩猩", monster: "怪兽", frankenstein: "科学怪人",
+  bear: "熊爬", crab: "螃蟹", stork: "鹤式", swimmer: "游泳", skater: "滑冰",
+  skier: "滑雪", ski: "滑雪", sprint: "冲刺", sprints: "冲刺", runners: "跑者",
+  runner: "跑者", speed: "速度", quick: "快速", feet: "脚", dynamic: "动态",
+  isometric: "等长", plyo: "增强式", archer: "弓箭手", clap: "击掌", diamond: "钻石",
+  pike: "屈体", "pike-to-cobra": "屈体眼镜蛇", handstand: "倒立", inchworm: "毛毛虫",
+  "dead bug": "死虫", bug: "虫", dead: "死", mountain: "登山", "good morning": "早安",
+  morning: "早安", good: "好", jackknife: "折刀", jumping: "跳跃", star: "星形",
+  pallof: "帕洛夫", goblet: "高脚杯", "clean-grip": "翻握", guillotine: "断头台",
+  skull: "碎颅", skullcrusher: "碎颅", crusher: "碎颅", french: "法式", jm: "JM",
+  tate: "泰特", svend: "斯文德", waiter: "侍者", "w-press": "W推举", farmers: "农夫",
+  farmer: "农夫", flag: "旗式", saw: "锯式", renegade: "叛徒", janda: "扬达",
+  gironda: "吉隆达", thibaudeau: "蒂博多", planche: "俯卧撑挺身", maltese: "马耳他",
+  kayak: "皮划艇", wind: "风", potty: "如厕", sissy: "西西", scott: "斯科特",
+});
+
+// Connectors, generic and remaining tokens
+reg({
+  with: "", on: "", to: "至", and: "", the: "", of: "", from: "", in: "",
+  against: "抵", between: "间", through: "穿过", around: "环绕",
+  over2: "上", off: "离", into: "入", above: "上方", plus: "加", anti: "抗",
+  "anti-gravity": "抗重力", gravity: "重力", exercise: "运动", stretch: "拉伸",
+  motion: "运动", range: "范围", circles: "画圈", circular: "画圈", clock: "时钟",
+  figure: "字形", v: "V", "v-bar": "V杠", blaster: "臂弯举器", drag: "拖拉",
+  drop: "递减", set: "组", pyramid: "金字塔", reps: "次", rep: "次", multiple: "多",
+  negative: "离心", military: "军式", upright: "直立", touch: "触碰", touchers: "触碰",
+  touchdown: "触地", down: "下", up: "上", ups: "起", out: "外", forward: "向前",
+  backward: "向后", forth: "向前", apart: "分开", together: "并拢", fours: "四肢着地",
+  all: "", squad: "深蹲", "3/4": "3/4", pov: "视角", tap: "点触", point: "尖",
+  response: "反应", release: "释放", catch: "接", hold: "保持", stabilization: "稳定",
+  balance: "平衡", fixed: "固定", tuck: "收膝", tucked: "收膝", clasped: "交扣",
+  spell: "拼写", caster: "施法", "spell caster": "施法者", sphinx: "斯芬克斯",
+  stalder: "斯塔尔德", staircase: "阶梯", skin: "皮", cat: "猫", "skin the cat": "穿越猫",
+  closer: "更近", angled: "倾斜", angle: "角度", sledge: "大锤", iron: "铁",
+  "iron cross": "十字支撑", tennis: "网球", hug: "抱", pin: "固定", rack: "架",
+  cycle: "循环", deep: "深", bowling: "保龄", contralateral: "对侧", unilateral: "单侧",
+  can: "罐", breeding: "繁殖", curtsey: "屈膝礼", curtsy: "屈膝礼", big: "大",
+  thrusts: "顶髋", thrust: "顶髋", ring: "吊环", self: "自我", slingers: "甩摆",
+  piriformis: "梨状肌", brachialis: "肱肌", brachii: "肱", pronate: "旋前",
+  "pronate-grip": "旋前握", seesaw: "跷跷板", "see-saw": "跷跷板", pirate: "海盗",
+  supper: "晚餐", style: "式", kipping: "借力", strict: "严格", modified: "改良",
+  basic: "基础", advanced: "进阶", intermediate: "中级", semi: "半", quarter2: "四分之一",
+  hyght: "海特", impossible: "不可能", depth: "深度", keens: "膝", reclining: "斜躺",
+  big2: "大", diagonal2: "对角", elevator: "升降", ground: "地面", wipers: "雨刷",
+  windshield: "雨刷", prisoner: "囚徒", hollow: "空心", boxing: "拳击", hook: "钩",
+  left: "左", right: "右", lean: "倾", gripper: "握力器", flexor: "屈肌", flexors: "屈肌",
+  extensor: "伸肌", extensors: "伸肌", pronators: "旋前肌", supinators: "旋后肌",
+  otis: "奥蒂斯", "otis-up": "奥蒂斯起坐", cocoon: "卷腹", kroc: "克罗克", meadows: "梅多斯",
+  male: "", female: "", hanging: "悬垂", hang: "悬垂", split: "分腿", hack: "哈克",
+  inverse: "反向", inverted: "倒置", stiff: "直腿", support: "支撑", supported: "支撑",
+  kick: "踢", kicks: "踢", muscle: "肌肉", bars: "杠", pose: "姿势", chin: "下巴",
+  rocking: "摇摆", flip: "翻转", power: "力量", depresor: "下降肌", depressor: "下降肌",
+  retractor: "回缩肌", stationary: "固定", straddle: "跨立", air: "空中", major: "大",
+  astride: "跨坐", knife: "刀", both: "双", "butt-ups": "臀桥", butterfly: "蝴蝶",
+  variation: "变式", pro: "专业", stirrups: "马镫", across: "横跨", position: "姿势",
+  get: "起", cobra: "眼镜蛇", toes: "脚尖", figure8: "8字",
+});
+
+const dicts: Partial<Record<LangCode, Record<string, string>>> = { ko, zh };
 
 /** Translate a free-text exercise name by tokenizing and translating each word.
  *  Only Korean is supported; every other language (and unknown tokens) falls

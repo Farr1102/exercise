@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useEffect, useRef, useState } from "react";
 import type { ExerciseSummary } from "@/lib/exercises";
 import { useLanguage } from "@/components/LanguageProvider";
 import { getTerm } from "@/lib/terms";
@@ -8,16 +9,45 @@ import { translateExerciseName } from "@/lib/nameTerms";
 
 export default function ExerciseCard({ exercise }: { exercise: ExerciseSummary }) {
   const { lang } = useLanguage();
+  const cardRef = useRef<HTMLAnchorElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  // Only load/play the video while the card is near the viewport. With 1,300+
+  // cards, mounting every <video> with autoPlay exhausts the browser's request
+  // pool (ERR_INSUFFICIENT_RESOURCES), so we gate loading on visibility.
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const el = cardRef.current;
+    if (!el) return;
+    const io = new IntersectionObserver(
+      ([entry]) => setVisible(entry.isIntersecting),
+      { rootMargin: "300px" }
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
+  useEffect(() => {
+    const v = videoRef.current;
+    if (!v) return;
+    if (visible) {
+      v.play().catch(() => {});
+    } else {
+      v.pause();
+    }
+  }, [visible]);
+
   return (
     <Link
+      ref={cardRef}
       href={`/exercises/${exercise.id}`}
       className="glass-card press group flex flex-col overflow-hidden rounded-xl transition-all hover:border-[var(--accent)]"
     >
       <div className="relative aspect-square overflow-hidden bg-[var(--background)]">
         <video
-          src={`/${exercise.video_url}`}
+          ref={videoRef}
+          src={visible ? `/${exercise.video_url}` : undefined}
           poster={`/${exercise.image}`}
-          autoPlay
           loop
           muted
           playsInline
