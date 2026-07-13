@@ -2,7 +2,19 @@
 
 :root {
   --background: #ffffff;
-  --foreground: #171717;
+  --background-secondary: #f5f5f8;
+  --foreground: #1a1a24;
+  --muted: #6b6b80;
+  --accent: #f97316;
+  --accent-light: #fb923c;
+  --border: #e4e4ec;
+  /* Subtle fill for chips/tags — dark on light theme (was white/5 on dark). */
+  --surface-subtle: rgba(20, 20, 36, 0.05);
+
+  /* Spring-like easing: overshoots slightly then settles (§4 behavior over animation).
+     Reserve --ease-spring for momentum/press; --ease-smooth for plain state changes. */
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-smooth: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 @theme inline {
@@ -12,15 +24,114 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+body {
+  /* Transparent so the fixed Silk shader background (§12) shows through. */
+  background: transparent;
+  color: var(--foreground);
+  line-height: 1.5;
+  text-rendering: optimizeLegibility;
+}
+
+/* §15 typography: large text wants negative tracking + tight leading; the
+   bigger the type, the more it needs to pull together. */
+h1 {
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+}
+h2,
+h3 {
+  letter-spacing: -0.01em;
+  line-height: 1.15;
+}
+
+@layer utilities {
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 6px;
+  }
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background-color: var(--border);
+    border-radius: 3px;
+  }
+
+  /* §1/§3 press feedback: instant scale-down on pointer-down, spring back on
+     release. Applied to any tappable surface (buttons, cards). */
+  .press {
+    transition: transform 0.4s var(--ease-spring),
+      box-shadow 0.4s var(--ease-smooth), border-color 0.2s var(--ease-smooth);
+    will-change: transform;
+  }
+  .press:active {
+    transform: scale(0.97);
+    transition: transform 0.1s ease-out;
+  }
+
+  /* §12 materials: translucent floating chrome, content scrolls underneath.
+     Bright top edge = light catching the material. Must live inside
+     @layer utilities — as bare rules, Tailwind v4/lightningcss drops the
+     backdrop-filter declaration at build time. */
+  .glass {
+    background: rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(14px) saturate(180%);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+    box-shadow: 0 1px 0 rgba(20, 20, 36, 0.04);
+  }
+
+  /* §12 material weight: a card is a bigger surface than nav chrome, so it
+     reads thicker — stronger blur + a deeper shadow. */
+  .glass-card {
+    background: rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(16px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    box-shadow: 0 8px 32px rgba(20, 20, 36, 0.1);
+  }
+
+  /* Interactive glass: inputs/selects. Lighter surface draws focus (§12), and
+     the inset highlight suggests a concave, touchable material. */
+  .glass-input {
+    background: rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(12px) saturate(160%);
+    border: 1px solid rgba(255, 255, 255, 0.55);
+    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.5);
+  }
+  .glass-input:focus {
+    border-color: var(--accent);
+  }
+
+  /* Small glass chip — least blur of the family (smallest surface). */
+  .glass-chip {
+    background: rgba(255, 255, 255, 0.45);
+    backdrop-filter: blur(10px) saturate(160%);
+    border: 1px solid rgba(255, 255, 255, 0.5);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* §14 reduced motion: gentle, no spring/scale/translate. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.15s !important;
+    transition-timing-function: ease !important;
+    scroll-behavior: auto !important;
+  }
+  .press:active {
+    transform: none;
+  }
+}
+
+/* §14 reduced transparency: solidify all glass surfaces so text stays legible. */
+@media (prefers-reduced-transparency: reduce) {
+  .glass,
+  .glass-card,
+  .glass-input,
+  .glass-chip {
+    background: var(--background) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
 }

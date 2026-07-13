@@ -39,3 +39,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# local debug artifacts (screenshots, snapshots, MCP output)
+/.playwright-mcp/
+/*.jpeg
+/*.png
+/fitbase-snapshot.txt
